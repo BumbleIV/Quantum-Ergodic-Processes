@@ -34,15 +34,23 @@ As part of Michigan State University's Mathematics Exchange Program, I am conduc
 <img align="left" alt="scipy" width="32px" src="https://unpkg.com/simple-icons@v6/icons/scipy.svg" /> 
 <img align="left" alt="scikitlearn" width="32px" src="https://unpkg.com/simple-icons@v6/icons/scikitlearn.svg" /> 
 
+&nbsp;
+
 **Contributors:**
 &nbsp;
 
 [Professor Jeffrey Schenker](https://sites.google.com/a/msu.edu/jeffrey-schenker/home)
+&nbsp;
+
 Kong Xiangshuo
-David Cody Taupo Lingan
+&nbsp;
+
+[David Cody Taupo Lingan](https://www.linkedin.com/in/davidcodylingan/)
+&nbsp;
+
 Jenny Zhang
+&nbsp;
+
 Samuel Sottile
-
-
 &nbsp;
 
