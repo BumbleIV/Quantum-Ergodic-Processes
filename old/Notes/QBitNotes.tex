@@ -1,0 +1,531 @@
+\documentclass[12pt]{amsart}
+\usepackage{jeffmath}
+\usepackage[letterpaper]{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\usepackage[unicode=true, bookmarks=true,bookmarksnumbered=false,bookmarksopen=false, breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]{hyperref}
+\hypersetup{pdfauthor={Jeffrey Schenker}}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\theoremstyle{theorem}
+\newtheorem{theorem}{\theoremname}
+%biblatex
+%\usepackage[backend=biber, sorting=nyt,sortcites=true,style=trad-abbrv,date=comp,abbreviate=true,hyperref=true, url=false,arxiv=abs,doi=false,isbn=false]{biblatex}
+%\addbibresource{/users/jeffrey/Library/texmf/bibtex/library.bib}
+%\DeclareFieldFormat{titlecase}{#1}
+%\bibliography{/users/jeffrey/Library/texmf/bibtex/library.bib}
+%\AtEveryBibitem{\clearfield{month}}
+%\DeclareSourcemap{
+%  \maps[datatype=bibtex, overwrite]{
+%    \map{
+%      \step[fieldset=month, null]
+%    }
+%  }
+%}
+
+
+
+\begin{document}
+	\title{Quantum channels on qbits}
+	\maketitle
+	\section{A little linear algebra}
+	Consider the vector space $\cH = \bbC^n$.  An 
+	element $\vec{z}\in \cH$ will be denoted in bold, where 
+	$\vec{z}=(z_1,\ldots,z_n)$.  We will use the Dirac notation wherein
+	$$\ket{\vec{z}} \ = \ \begin{bmatrix} z_1 \\ \vdots \\ z_n \end{bmatrix}$$
+	denotes the column vector and  $$\bra{\vec{z}} \ = \ \begin{bmatrix} z_1^* 
+		& \cdots & z_n^*  \end{bmatrix} $$
+	denotes the complex conjugate row vector.  The inner product between two 
+	vectors is given by:
+	$$\bra{\vec{z}}\ket{\vec{w}} \ = \ \sum_{j=1}^n z_j^* w_j \ . $$
+	Recall the complex conjugate $(a+ib)^* = a - i b$, for a complex number.  
+	Note that
+	$$\bra{\vec{z}}\ket{\vec{w}}^* \ = \ \bra{\vec{w}}\ket{\vec{z}} \ . $$
+	The \emph{norm} $\norm{\vec{z}}$ of a vector, is it's Euclidean length, 
+	given by
+	$$\norm{\vec{z}}^2 \ = \ \sum_{j=1}^n |z_j|^2 \ = \ 
+	\diracip{\vec{z}}{\vec{z}} \ . $$
+	
+		Let $\vec{A}$ be an $n\times n$ matrix,  
+	$$ \vec{A} \ = \ \begin{bmatrix}
+		A_{11} & \ldots & \ldots & A_{1n} \\
+		\vdots & \ddots & & \vdots \\
+		\vdots & & \ddots & \vdots \\
+		A_{n1} & \ldots & \ldots & A_{nn}
+	\end{bmatrix} \ . $$
+	The \emph{transpose} $\vec{A}^T$ of $\vec{A}$ is the matrix with 
+	$\vec{A}^T_{ij}\ = \ A_{ji}$.  The complex conjugate of the transpose is 
+	called the \emph{adjoint} of $\vec{A}$ and denoted $\vec{A}^\dagger$.  
+	Thus, 
+	$$A_{ij}^\dagger \ = \ A_{ji}^T \ . $$
+	Note that 
+	$$\left ( \dirac{\vec{z}}{\vec{A}}{\vec{w}} \right )^* \ = \ 
+	\dirac{\vec{w}}{\vec{A}^\dagger}{\vec{z}} \ . $$
+	A matrix $\vec{A}$ is \emph{self-adjoint} if  $\vec{A}^\dagger = \vec{A}$, 
+	i.e., $A_{ji} = A_{ij}^*$.  For a self-adjoint matrix, one has
+	\begin{equation}\label{eq:selfadjointconjugateip}
+		\left ( \dirac{\vec{z}}{\vec{A}}{\vec{w}} \right )^* \ = \ 
+		\dirac{\vec{w}}{\vec{A}}{\vec{z}} 
+	\end{equation}
+	
+	Recall that an \emph{eigenvector} of a matrix $A$ is a non-zero vector 
+	$\vec{z}$ such that
+	$$ A \ket{\vec{z}} \ = \ \lambda \vec{z}$$
+	with $\lambda \in \bbC$, called the \emph{eigenvalue} of $\vec{z}$.  
+	Suppose that $\vec{A}$ is self-adjoint.  Then
+	$$\dirac{\vec{z}}{\vec{A}}{\vec{z}} \ = \ \lambda 
+	\diracip{\vec{z}}{\vec{z}} \ = 
+	\ \lambda \norm{\vec{z}}^2 \ . $$
+	Taking complex conjugates, and using \eqref{eq:selfadjointconjugateip}, we 
+	find that
+	$$ \lambda^* \norm{\vec{z}}^2 \ = \ \dirac{\vec{z}}{\vec{A}}{\vec{z}} \ = \ 
+	\lambda \norm{\vec{z}}^2 \ . $$
+	Since $\norm{\vec{z}}\neq 0$, we conclude that $\lambda^*=\lambda$, i.e. 
+	that $\lambda$ is a real number.  So every eigenvector of a self-adjoint 
+	matrix is real.
+	
+	A sequence of $m$-vectors $\vec{z}_1,\ldots,\vec{z}_m$ is called 
+	\emph{ortho-normal} if 
+	$$\diracip{\vec{z_i}}{\vec{z_j}} \ = \ \delta_{i,j} \ . $$ 
+	Here $\delta_{i,j}$ is the \emph{Kronecker $\delta$ symbol}; it equals $1$ 
+	if $i=j$ and $0$ if $i\neq j$.  One can show that any ortho-normal sequence 
+	is linearly independent.  If $m=n$, then the sequence is also a basis, and 
+	is called an ortho-normal basis.  If $\vec{z}_1,\ldots,\vec{z}_n$ is an 
+	ortho-normal basis and $\vec{z}\in \cH$, then
+	$$\ket{\vec{z}} \ = \ \sum_{j=1}^n \left ( \diracip{\vec{z_j}}{\vec{z}} 
+	\right ) \ket{\vec{z_j}} \ .  $$
+	Another way to write this expression is to note that the \emph{identity 
+	matrix} $\vec{I}$, with $I_{ij}=\delta_{ij}$, can be written
+	$$ \vec{I} \ = \ \sum_{j=1}^n \ket{\vec{z_j}}\bra{\vec{z_j}} \ . $$
+	
+	\begin{thm} Every self-adjoint matrix $\vec{A}$ has an ortho-normal basis 
+	of eigenvectors.
+		\end{thm}
+	\begin{proof} First note that every matrix $\vec{A}$ has at least one 
+	eigenvector.  This is because $\lambda\in \bbC$ is an eigenvalue of 
+	$\vec{A}$ if and only if $\det (\lambda \vec{I} - \vec{A}) \ = \ 0 $.  The 
+	determinant $\det (\lambda \vec{I} - \vec{A})$ is a polynomial of degree 
+	$n$ in $\lambda$. The Fundamental Theorem of Algebra states that every 
+	polynomial has a root in $\bbC$.  For a self-adjoint matrix, the eigenvalue 
+	has to be real, of course.
+		
+		Let $\vec{z}_1$ be an eigenvector of $\vec{A}$, with eigenvalue 
+		$\lambda_1$.  Divide $\vec{z}_1$ by its length if necessary so that it 
+		has length one. Consider the set of vectors orthogonal to $\vec{z}_1$:
+		$$\cH_1 \ = \ \{ \vec{z} \ : \ \diracip{\vec{z_1}}{\vec{z}} = 0 \} \ .$$
+		For such vectors,
+		$$\dirac{\vec{z_1}}{\vec{A}}{\vec{z}} \ = \ \lambda_1  
+		\diracip{\vec{z_1}}{\vec{z}} \ = \ 0 \ . $$
+		That is $\vec{A}$ maps the space  $\cH_1$ into itself.  Choosing an 
+		ortho-normal basis for $\cH_1$ we can rexpress $\vec{A}$ on this space 
+		as an $n-1 \times n-1$ matrix (because $\dim \cH_1=n-1$).  One can show 
+		that the matrix is self-adjoint.  So it has an eigenvector $\vec{z}_2$ 
+		and eigenvalue $\vec{\lambda}_2$.  We can take $\vec{z}_2$ to have 
+		length one. Now define $\cH_2$ to be all the set 
+		of all vectors orthogonal to $\vec{z}_1$ and $\vec{z}_2$.  If $n=2$ the 
+		only such vector is $\vec{0}$, but but if not there is a non-trivial 
+		subspace.  Repeating the above argument we can find an eigenvector 
+		among them.  Continue this process until you have $n$ eigenvectors, at 
+		which  point we have a basis which is ortho-normal by construction.
+		\end{proof}
+	
+		If $\vec{A}$ is self-adjoint, with ortho-normal eigenvectors 
+		$\vec{z}_1,\ldots,\vec{z}_n$ and eigenvalues 
+		$\lambda_1,\ldots,\lambda_n$, then 
+		\begin{equation}\label{eq:Aevevrep}
+			\vec{A} \ = \ \sum_{j=1}^n \lambda_j \ket{\vec{z}_j} 
+			\bra{\vec{z}_j} \ . 
+			\end{equation} 
+		For any complex valued function $f$ on the eigenvalues, one defines
+		\begin{equation}\label{eq:f(A)}
+			f(\vec{A}) \ = \ \sum_{j=1}^n f(\lambda_j) \ket{\vec{z}_j} 
+			\bra{\vec{z}_j} \ .
+		\end{equation}
+	\section{Finite dimensional quantum systems} 
+	We will 
+	consider \emph{finite dimensional quantum systems}.  These are 
+	approximations to real systems, which typically need infinite dimensional 
+	spaces for their full description.  However, in many interesting systems 
+	there is a finite number of the dimensions needed to describe the 
+	``effective,'' or important, properties of the system.
+	
+	For each system we consider we will take the Hilbert space $\cH=\bbC^n$ for 
+	some $n$. An \emph{observable} of our quantum system is an $n\times n$ 
+	self-adjoint matrix.   Recall that a matrix $\rho$ is \emph{positive 
+	semi-definite} if
+	\begin{equation}\label{eq:psd}
+		\dirac{\vec{z}}{\rho}{\vec{z}} \ \ge \ 0 
+	\end{equation}
+for all $\vec{z}\in \cH$.  Such a matrix is self-adjoint with all non-negative 
+eigenvalues.  Conversely, if $\rho$ is self-adjoint and all of its eigenvalues 
+are non-negative, then $\rho$ is positive semi-definite. 
+	A \emph{state} of our system is a positive semi-definite matrix $\rho$ with 
+	$\tr \rho =1$.  Here $\tr \vec{A}$ denotes the \emph{trace} of a matrix, 
+	$\tr\vec{A} \ = \ \sum_{i=1}^n A_{ii}$.  One can also has
+	$$\tr \vec{A} \ = \ \sum_{j=1}^n \dirac{\vec{z}_j}{\vec{A}}{\vec{z}_j}$$
+	for any ortho-normal basis $\vec{z}_1,\ldots,\vec{z}_n$.
+	
+	According to quantum mechanics, the eigenvalues 
+	$\lambda_1,\ldots,\lambda_n$ of an observable $\vec{A}$ represent the 
+	possible outcomes of a measurement of $\vec{A}$. If our system has state 
+	$\rho$ and we measure $\vec{A}$, quantum mechanics predicts that we obtain 
+	the answer $\lambda_j$ with probability 
+	$\dirac{\vec{z}_j}{\rho}{\vec{z}_j}$, where $\vec{z}_j$ is the 
+	corresponding eigenvector. Since $\sum_j \dirac{\vec{z}_j}{\rho}{\vec{z}_j} 
+	= \tr \rho = 1$, the probabilities add to one.  This all means that if we 
+	prepare our system in state $\rho$ many times and measure $\vec{A}$ each 
+	time, we will obtain different answers, but in the long run the fraction of 
+	times we get $\lambda_j$ as an answer will approach 
+	$\dirac{\vec{z}_j}{\rho}{\vec{z}_j}$. 
+		
+	
+	\section{The Bloch Sphere representation of qubits}
+	A \emph{qubit} is a ``two-level'' quantum sytem.  The Hilbert space of a 
+	qbit is $\bbC^2$, which is the simplest non-trivial Hilbert space. An 
+	observable for a qubit is a $2\times 2$ self-adjoint matrix.  Any such 
+	matrix $\vec{A}$ is of the form
+\begin{equation}\label{eq:sa22}
+	\vec{A} \ = \ \begin{bmatrix}
+		\alpha & \gamma - i \delta  \\
+		\gamma + i \delta & \beta 
+ 	\end{bmatrix} 
+\end{equation}
+ with $\alpha,\beta,\gamma,\delta \in \bbR$.  The space of observables 
+ is a four dimensional vector space with a basis given by the identity
+ $$\sigma_0 = I = \begin{bmatrix} 1 & 0 \\
+ 	0 & 1 \end{bmatrix} $$
+ together with the \emph{Pauli} matrices:
+ \begin{equation}\label{eq:Pauli}
+ 	\sigma_1 = \begin{bmatrix} 0 & 1 \\
+ 		1 & 0 \end{bmatrix} \ , \quad \sigma_2 = \begin{bmatrix} 0 & -i \\
+ 		i & 0 \end{bmatrix}\ , \quad \text{and} \quad \sigma_3 = 
+ 	\begin{bmatrix} 1 
+ 		& 0 \\ 0 & -1 
+ 	\end{bmatrix} \ .
+ \end{equation}
+Explicitly, if $\vec{A}$ is given by \eqref{eq:sa22}, then 
+$$\vec{A} \ = \ \frac{\alpha + \beta}{2} I + \gamma \sigma_1 + 
+\delta \sigma_2  + \frac{\alpha -\beta}{2} \sigma_3 \ . $$
+
+A density matrix of the qubit is a $2\times 2$ positive semi-definite 
+	matrix.  Such a matrix  is  the form \eqref{eq:sa22} with 
+	with $\alpha,\beta\ge 0$, $\alpha+\beta=1$, and $\det \rho = 
+	\alpha \beta -\gamma^2-\delta^2 \ge 0$.  A density matrix $\rho$ 
+	represents a \emph{pure state} if $\rho$ is a rank one projection.  For 
+	qubits, 
+	this happens precisely if the determinant $ab-\gamma^2-\delta^2 =0$.  
+	Then we have 
+	$\gamma+i \delta =\e^{i\theta }\sqrt{ab}$ for 
+	some $\theta \in [0,2\pi)$, and so
+	$$\rho \ = \ \begin{bmatrix} a & e^{-i\theta} \sqrt{ab} \\
+		\e^{i\theta} \sqrt{ab} & b \end{bmatrix} \ = \ 
+	\begin{bmatrix}\sqrt{a} 
+		\\
+		\e^{i\theta} \sqrt{b} \end{bmatrix} \begin{bmatrix} \sqrt{a} & 
+		\e^{-i\theta} \sqrt{b} \end{bmatrix} \ . $$
+	\begin{prop}[Bloch sphere representation] Let $\rho$ be the density matrix 
+		of a state of $\mathfrak{A}_2$.  Then $\rho$ has the form
+		\begin{equation}\label{eq:Blochsphere}
+			\rho \ = \ \tfrac{1}{2} \left [ I + \vec{v}\cdot \vec{\sigma} 
+			\right ] \ = \ \tfrac{1}{2}\left [ I + v_1 \sigma_1 + v_2 \sigma_2 
+			+ v_3 
+			\sigma_3 \right ]  \ ,
+		\end{equation}
+		with $\vec{v}=(v_1,v_2,v_3)$ and $|\vec{v}|^2 \le 1$.  Furthermore, 
+		$\rho$ 
+		is a pure state if and only 
+		if $|\vec{v}|=1$. 
+	\end{prop}
+	\begin{proof}
+		Let $\rho$ have the form \eqref{eq:sa22} with $\alpha,\beta\ge 0$, 
+		$\alpha+\beta=1$ and $\alpha \beta - \gamma^2 -\delta^2\ge 0$.  Taking 
+		$v_1= 2\gamma$, $v_2=2 \delta $ and $v_3 = \alpha-\beta$, we find that
+		$$\rho \ = \ \tfrac{1}{2}\left [ I + v_1 \sigma_1 + v_2 \sigma_2 + v_3 
+		\sigma_3 \right ]  \ , $$
+		with 
+		$$v_1^2 + v_2^2 + v_3^2 \ = \ 4 (\gamma^2 + \delta^2) + \alpha^2 - 2 
+		\alpha\beta + \beta^2 \ \le \ (\alpha+\beta)^2 \ 
+		= \ 1 \ . $$
+		It also follows that $\rho$ is pure, with $\alpha \beta 
+		-\gamma^2-\delta^2=0$, if and only if 
+		$|\vec{v}|^2=1$. 
+	\end{proof}
+
+\section{The Pauli matrices} The Pauli matrices introduced above have a very 
+nice algebraic relation with one another.  First of all, one sees that
+$$ \sigma_j^2 \ = \ I \quad \text{for } j=1,2,3 \ . $$
+Secondly, one has 
+\begin{multline*} \sigma_1 \sigma_2 \ = \ i \sigma_3 \ , \quad \sigma_2 
+\sigma_3 \ = \ i \sigma_1 \ , \quad \sigma_3 \sigma_1 \ = \ i \sigma_2 \ , \\
+	\sigma_3 \sigma_2 \ = \ - i 
+	\sigma_1 \ , \quad \text{and} \quad \sigma_2 \sigma_1 \ = \ -i \sigma_3 \ , 
+	\quad  \sigma_1 \sigma_3 \ = \ -i \sigma_2 \  .
+	\end{multline*}
+These identities can be summarized as
+\begin{equation}\label{eq:pauliproducts}
+	\sigma_{i}\sigma_j \ = \ \delta_{ij} I + i \sum_{k=1}^3 \eps_{ijk}\sigma_k
+\end{equation}
+where $\eps_{ijk}$ is the \emph{totally antisymmetric symbol}
+\begin{equation}\label{eq:eps}
+	\eps_{ijk} \ = \ \begin{cases} 0 & \text{if any two indices are equal,} \\
+		1 & \text{if } (i,j,k) = (1,2,3), \ (2,3,1),\ \text{or}\ (3,1,2) \ , 
+		\text{and} \\
+		-1 & \text{if } (i,j,k) = (3,2,1), \ (2,1,3),\ \text{or}\ (1,3,2) \ .
+	\end{cases}
+\end{equation}
+
+In terms of the \emph{commutators} $[\sigma_i,\sigma_j] \ = \ \sigma_i \sigma 
+_j -\sigma_j \sigma_i$, \eqref{eq:pauliproducts} implies the following 
+\emph{commutation relations}
+\begin{equation}\label{eq:paulicommutators}
+	[\sigma_i,\sigma_j] \ = \ 2i \sum_{k=1}^3 \eps_{ijk} \sigma_k \ .
+\end{equation}
+That is 
+\begin{multline*}
+	[\sigma_1,\sigma_2]\ = \ - [\sigma_2,\sigma_1] \ = \ 2i\sigma_3 \ , \quad 
+	[\sigma_2,\sigma_3]\ = \ -[\sigma_3, \sigma_2] \ = \ 2i \sigma_1 \ , \\
+	\text{and} \quad [\sigma_3,\sigma_1] \ = - [\sigma_1,\sigma_3] \ = \ 2i 
+	\sigma_2 \ .
+\end{multline*}
+
+\section{Evolution of an isolated Qubit}
+To do some interesting physics we need to understand how the state of our 
+system evolves in time.   Let us first consider a qubit all by itself.  In that 
+case the state $\rho(t)$ of the system as a function of time $t$ satisfies the 
+\emph{Liouville-Schr\"odinger} equation
+\begin{equation}\label{eq:LiouvilleSchrodinger}
+	\frac{d}{dt} \rho(t) \ = \ - i [H,\rho(t)] \ ;
+\end{equation}
+on the right hand side we have the commutator $[H,\rho(t)] = H\rho(t) -\rho(t) 
+H$. Here $H$ is a special observable, called the \emph{Hamiltonian}, which 
+corresponds to the energy of the system. The equation should have a factor of 
+$\frac{1}{\hbar} = \frac{2\pi}{h}$ where $h$ is Planck's constant; by choosing 
+the right units we can take $\hbar =1$.  
+	
+To solve \eqref{eq:LiouvilleSchrodinger} we can use the commutation relations 
+\eqref{eq:paulicommutators}:  
+
+\begin{exer}Suppose that $H = c I + \vec{w}\cdot \vec{\sigma}$, where 
+$\vec{w}\in \bbR^3$ 
+	and that $\rho \ = \ \frac{1}{2}[I + \vec{v}\cdot \vec{\sigma}] $, where 
+	$|\vec{v}| \le 1$. Show that
+	$$[H,\rho] \ = \ i (\vec{w}\times \vec{v}) \cdot \vec{\sigma} \ , $$
+	where 
+	$$ \vec{w} \times \vec{v} \ = \ (w_2v_3 - w_3v_2, \ w_3v_1-w_1v_3, \ 
+	w_1v_2-w_2v_1) $$
+	is the cross product.
+	\end{exer}
+
+Note that the constant term $cI$ in $H$ drops out of the commutator.  This is a 
+usual fact from physics: the origin of the energy doesn't matter; it is energy 
+\emph{differences} that are physical.  So we can assume that $H=\vec{w}\cdot
+\vec{\sigma}$.  If $\rho(t) \ = \ \frac{1}{2}[I + \vec{v}(t)\cdot 
+\vec{\sigma}]$, then  the Liouville-Schr\"odinger equation 
+\eqref{eq:LiouvilleSchrodinger} becomes
+\begin{equation}\label{eq:BlochLS}
+	\frac{d}{dt} \vec{v}(t) \ = \ \vec{w} \times \vec{v}(t) \ . 
+\end{equation}
+Eq.\ \eqref{eq:BlochLS} is a a linear differential equation for 
+$\vec{v}(t)$; given an initial value $\vec{v}(0)$ it is well known that there 
+is a unique solution to \eqref{eq:BlochLS} for all $t\in \bbR$.  This equation  
+describes the rotation of 
+$\vec{v}(t)$ around the axis $\hat{\vec{w}} = \frac{1}{|\vec{w}|}\vec{w}$, 
+with angular speed $\omega=|\vec{w}|$. 
+\begin{exer} Let $\vec{v}_0$ be a point in the Bloch sphere 
+$\{|\vec{v}|\le 1\}$ and consider the solution $\vec{v}(t)$ to 
+\eqref{eq:BlochLS} with $\vec{v}(0) = \vec{v}_0$. 
+ Show that 
+$$\vec{v}(t) \ = \ \vec{v}_0 + ( \cos(\omega t) -1)\vec{u} + \sin(\omega t) 
+\vec{u}' \ , $$
+where 
+$ \vec{u} =  \vec{v}_0 - ( \hat{\vec{w}}\cdot \vec{v}) 
+\hat{\vec{w}}$
+is the projection of $\vec{v}_0$ onto the plane orthogonal to $\vec{w}$,  and 
+$\vec{u}' = \hat{\vec{w}}\times \vec{u}$.
+\end{exer}
+So a qubit by itself has a vector $\vec{v}(t)$ in the Bloch sphere which just 
+rotates around a given axis at a certain speed.  
+
+\section{Quantum Channels} Things can get more 
+interesting if we allow the qubit to interact with its environment.  In general 
+it is quite a hard problem to solve for the evolution of a large quantum 
+system, such as a qubit together with its environment.  However, there is a 
+useful approximation, called the \emph{Markov approximation}, 
+  which roughly speaking applies if the environment is so big, and complicated, 
+  that we can neglect the effect of the system on its environment.  You 
+  don't really need to worry about what that all means.  In the end it comes 
+  down to the following: \emph{the evolution of a system interacting with an 
+  environment over a discrete interval of time is given by a \emph{quantum 
+  channel}, which is a \emph{completely positive, trace preserving} map on 
+  density matrices.} 
+
+We should define the terms that appear in the above assertion.
+\begin{defn} A \emph{completely positive map} on the states of a quantum system 
+is a map 
+	\begin{equation}\label{eq:Kraus}
+		\Phi(\rho) \ = \ \sum_{j=1}^m A_j \rho A_j^\dagger
+	\end{equation}
+	where $A_1,\ldots,A_m$ are certain $n\times n$ matrices, called the 
+	\emph{Kraus operators of the map} .
+	\end{defn}
+In fact, the correct mathematical definition of a completely positive map is 
+ more abstract;  the fact that any such map  (on a finite dimensional 
+system) has the form \eqref{eq:Kraus} is called \emph{Kraus' Theorem}.  
+\begin{defn}  A map $\rho \mapsto T(\rho)$ defined on matrices is \emph{trace 
+preserving} if $\tr \rho = \tr T(\rho)$.
+	\end{defn}
+Putting together the two definitions we have
+\begin{defn} A \emph{quantum channel} is a trace preserving, completely 
+positive map on the states of a quantum system.
+	\end{defn}
+
+Recall that the trace $\tr \rho = \sum_i \rho_{ii}$.  If $A$ and $B$ are two 
+matrices, it follows that
+\begin{equation}\label{eq:cyclicity}
+	\tr A B \ = \sum_{i}\left(\sum_j A_{i,j}B_{j,i}\right) \ = \ \sum_j 
+	\left(\sum_i B_{j,i}A_{i,j}\right) \ = \tr B A \ .
+\end{equation}
+This fact is called \emph{cyclicity of the trace}.  For a quantum channel 
+$\Phi$ and a density matrix $\rho$, we have
+$$1 = \tr \Phi(\rho) \ = \ \sum_{j=1}^m \tr A_j\rho A_j^\dagger \ = \ 
+\sum_{j=1}^m \tr A_j^\dagger A_j \rho \ = \ \tr \left(\sum_{j=1}^m A_j^\dagger 
+A_j \right) \rho \ . $$
+Since $\rho$ could be any density matrix, this holds if and only if 
+$$\sum_{j=1}^m A_j^\dagger A_j \ = \ I .$$
+So \emph{a quantum channel is a completely positive map with Kraus operators 
+that satisfy $\sum_j A_j^\dagger A_j$.}
+
+\section{Amplitude Damping Channel of a Qubit}
+A simple \emph{amplitude damping} of a qubit has the form
+\begin{equation}\label{eq:ADChannel}
+	\Phi_\gamma(\rho) \ = \ A_0 \rho A_0^\dagger + A_1 \rho A_1^\dagger 
+\end{equation}
+where 
+\begin{equation}\label{eq:simpleAs}
+	A_0 \ = \ \begin{bmatrix}
+	1 & 0 \\ 0 & \sqrt{1-\gamma}
+\end{bmatrix} \quad \text{and} \quad A_1 \ = \ \begin{bmatrix}
+0 & \sqrt{\gamma} \\ 0 & 0 
+\end{bmatrix} \ . 
+\end{equation}
+It represents the ``relaxation'' of a qubit to a ground state given by 
+$\rho_{GS} \ = \ \left[ \begin{smallmatrix}
+	1 & 0 \\ 0 & 0 
+\end{smallmatrix}\right] $ .  
+\begin{exer}	
+For $\rho = \frac{1}{2} [I +\vec{v}\cdot \vec{\sigma}]$, show that 
+$\Phi_\gamma(\rho) \ = \ \frac{1}{2} [I +\vec{v}'\cdot \vec{\sigma}]$ with
+\begin{multline*}
+	\vec{v}' \ = \  \left(\sqrt{1-\gamma} v_1, \sqrt{1-\gamma}v_2 , \gamma + 
+(1-\gamma)v_3\right) \\ = \ \sqrt{1-\gamma}(\vec{v} - (\vec{e}_3\cdot \vec{v}) 
+\vec{e}_3) + (\gamma+ (1-\gamma) \vec{e}_3\cdot \vec{v}) \vec{e}_3 \ ,
+\end{multline*}
+where $\vec{e}_3=(0,0,1)$.
+\end{exer}
+
+
+Note that, for $A_0$ and $A_1$ as in \eqref{eq:simpleAs}, we have
+$$A_0 \ = \ \frac{1}{2} \left[(1+\sqrt{1-\gamma})I + 
+(1-\sqrt{1-\gamma})\sigma_3\right]\quad \text{and} \quad A_1 \ = \ 
+\frac{\sqrt{\gamma}}{2} \left[\sigma_1 + i \sigma_2\right] \ . $$
+Using this observation, one can define an amplitude damping channel with 
+respect to any axis 
+$\hat{\vec{w}}$ (in place of $\vec{e}_3$).
+\begin{exer}
+	Consider the map on states given by $ \frac{1}{2} [I +\vec{v}\cdot 
+	\vec{\sigma}] \mapsto [I +\vec{v}'\cdot \vec{\sigma}]$ where
+	$$\vec{v}' \ = \ \sqrt{1-\gamma}(\vec{v} - (\hat{\vec{w}}\cdot \vec{v}) 
+	\hat{\vec{w}}) + (\gamma+ (1-\gamma) \hat{\vec{w}}\cdot \vec{v}) 
+	\hat{\vec{w}} \ . $$
+	Show that this map corresponds to the channel $\Phi_{\gamma,\hat{\vec{w}}}$ 
+	given by \eqref{eq:ADChannel} with
+	$$ A_0 \ = \ \frac{1}{2}\left[(1+\sqrt{1-\gamma})I + 
+	(1-\sqrt{1-\gamma})\hat{\vec{w}}\cdot \vec{\sigma}\right] \quad \text{and} 
+	\quad A_1 \ = \ \frac{\sqrt{\gamma}}{2} \left[ \vec{w}^\perp_1\cdot 
+	\vec{\sigma} + i \vec{w}^\perp_2\cdot \vec{\sigma}  \right] \ ,$$
+	where $\hat{\vec{w}}_1^\perp$ and $\hat{\vec{w}}_2^\perp$ are two vectors 
+	such that
+	\begin{enumerate}
+		\item $\hat{\vec{w}}_j^\perp$, $j=1,2$, are orthogonal to 
+		$\hat{\vec{w}}$, i.e $\hat{\vec{w}}_j^\perp \cdot \hat{\vec{w}} = 0$, 
+		$j=1,2$, and
+		\item $\hat{\vec{w}}_1^\perp \times \hat{\vec{w}}_2^\perp = 
+		\hat{\vec{w}}$.
+	\end{enumerate} 
+\end{exer}
+
+Returning to the simple amplitude damping channel with $A_0$, $A_1$ as in 
+\eqref{eq:simpleAs}, note that if we write $\vec{v}=(v_1,v_2,v_3)$ as a row 
+vector, then the channel amounts to the map
+$$\vec{v} \ \mapsto \ \gamma \vec{e}_3 + \vec{v} \begin{bmatrix} 1-\gamma & 0 & 
+0 \\ 0 & \sqrt{1-\gamma} & 0 \\
+	0 & 0 & \sqrt{1-\gamma} \end{bmatrix} \ . $$
+\begin{exer} Show that the result $\Phi_\gamma^n(\rho)$ of $n$ repeated 
+applications of $\Phi_\gamma$ to $\rho=\frac{1}{2}[I + \vec{v}\cdot 
+\vec{\sigma}]$ is 
+given by
+$$\vec{v}  \ \mapsto \ \gamma \left(\sum_{j=0}^{n-1} (1-\gamma)^j \right) 
+\vec{e}_3 + \vec{v} 
+\begin{bmatrix} (1-\gamma)^{n} & 0 & 
+	0 \\ 0 &( 1-\gamma)^{\frac{n}{2}} & 0 \\
+	0 & 0 & ( 1-\gamma)^{\frac{n}{2}} \end{bmatrix} \ . $$
+\end{exer}
+Recall the geometric series
+$$\sum_{j=0}^{\infty} (1-\gamma)^j \ = \ \frac{1}{\gamma} \ , $$
+for $0 < \gamma \le 1$.  In particular,
+$$\sum_{j=0}^{n-1} (1-\gamma)^j \ = \ \frac{1}{\gamma} - \sum_{j=n}^\infty 
+(1-\gamma)^j \ = 
+\ \frac{1}{\gamma} - \frac{(1-\gamma)^n}{\gamma} \ . $$
+\begin{exer} For a general amplitude damping channel 
+$\Phi_{\gamma,\hat{\vec{w}}}$ show that $\Phi_{\gamma,\hat{\vec{w}}}(\rho)\ = 
+\ 
+\frac{1}{2}[I + \vec{v}_n\cdot 
+	\vec{\sigma}]$ with 
+	$$ \vec{v}_n \ = \ \hat{\vec{w}} + (1-\gamma)^n ( \hat{\vec{w}}\cdot 
+	\vec{v} -1 )\hat{\vec{w}} + (1-\gamma)^{\frac{n}{2}} (\vec{v}- 
+	(\hat{\vec{w}}\cdot \vec{v}) \hat{\vec{w}}) \ . $$
+	\end{exer}
+Note that $\vec{v}_n = \hat{\vec{w}} + O((1-\gamma)^{\frac{n}{2}})$, so the 
+state converges exponentially fast to the pure state $\frac{1}{2}[I + 
+\hat{\vec{w}}\cdot \vec{\sigma}]$. 
+
+Finally let us introduce a combination of the free dynamics of the qubit and an 
+amplitude damping channel.  Let $\Phi_{\gamma,\hat{\vec{w}},\delta}$ be the 
+channel of the form \eqref{eq:ADChannel} with
+\begin{multline*}
+	A_0 \ = \ \frac{1}{2}\left[(1+\sqrt{1-\gamma})I + 
+(1-\sqrt{1-\gamma})\hat{\vec{w}}\cdot \vec{\sigma}\right] \e^{i\delta 
+\hat{\vec{w}}\cdot \sigma} \\ \text{and} \quad  A_1 \ = \ 
+\frac{\sqrt{\gamma}}{2} \left[ \vec{w}^\perp_1\cdot 
+\vec{\sigma} + i \vec{w}^\perp_2\cdot \vec{\sigma}  \right] \e^{i \delta 
+\hat{\vec{w}}\cdot \vec{\sigma} } \ ,
+\end{multline*}
+with $\vec{w}_j^\perp$, $j=1,2$, as above.
+This represents the evolution of a qubit subject to amplitude damping and a 
+Hamiltonian $- \hat{\vec{w}}\cdot \vec{\sigma}$ over a time interval of length 
+$\delta$. The equilibrium state is still $\frac{1}{2}[I + \hat{\vec{w}}\cdot 
+\vec{\sigma}]$, but the evolution is different in that the component 
+perpendicular to $\hat{\vec{w}}$ rotates as it shrinks to zero. 
+\begin{exer}Consider the generalized amplitude damping channel 
+$\Phi_{\gamma,\hat{\vec{w}},\delta}$.  Show that for 
+$\rho=\frac{1}{2}[I + \vec{v}\cdot \sigma]$, we have
+$\Phi_{\gamma,\hat{\vec{w}},\delta}^n(\rho) = \frac{1}{2} [I + \vec{v}_n\cdot 
+\sigma]$ with
+$$ \vec{v}_n \ = \ (1 +(1-\gamma)^n(\hat{\vec{w}}\cdot \vec{v} - 
+1))\hat{\vec{w}} +  (1-\gamma)^{\frac{n}{2}} (\cos(n\delta) \vec{u} + 
+\sin(n\delta) \vec{u}') \ , $$
+where $\vec{u} \ = \ \vec{v} - (\hat{\vec{w}}\cdot \vec{v})\hat{\vec{w}}$ and 
+$\vec{u}'= \hat{\vec{w}}\times \vec{u}$. 
+\end{exer}
+
+\section{Ergodic sequences of quantum channels}
+
+
+
+
+
+
+\end{document}
+
+
+
+
