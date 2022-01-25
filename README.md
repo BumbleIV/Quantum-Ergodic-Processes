@@ -20,6 +20,8 @@ ___
 **About:** 
 &nbsp;
 
+In 2012, The Department of Mathematics at Michigan State University initiated the Mathematics Exchange Program, a one-semester program for talented students from Jilin University, Nankai University and Xi’an Jiaotong University to conduct undergraduate research alongside MSU professors and students.
+
 As part of Michigan State University's Mathematics Exchange Program, I am conducting research alongside Dr. Schenker and his work on Quantum Ergodic Processes leading the coding portion of project translating MATLAB scripts that visualize the probability density function of random quantum channel tunneling to Python. 
 
 **Technologies:**
@@ -31,6 +33,16 @@ As part of Michigan State University's Mathematics Exchange Program, I am conduc
 <img align="left" alt="numpy" width="32px" src="https://unpkg.com/simple-icons@v6/icons/numpy.svg" /> 
 <img align="left" alt="scipy" width="32px" src="https://unpkg.com/simple-icons@v6/icons/scipy.svg" /> 
 <img align="left" alt="scikitlearn" width="32px" src="https://unpkg.com/simple-icons@v6/icons/scikitlearn.svg" /> 
+
+**Contributors:**
+&nbsp;
+
+[Professor Jeffrey Schenker](https://sites.google.com/a/msu.edu/jeffrey-schenker/home)
+Kong Xiangshuo
+David Cody Taupo Lingan
+Jenny Zhang
+Samuel Sottile
+
 
 &nbsp;
 
