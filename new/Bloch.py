@@ -6,7 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 def Bloch(lambd=0.01, delta=math.pi/12, N=100000, v0=[1, 0, 0], theta=math.pi/2, omega=1.1, phi=0):
     """ 
-    This function forms the Bloch sphere with default parameters. 
+    This function creates the Bloch sphere based on user input. Default parameters are provided.
     Lambda is named "lambd" to avoid confusion with the lambda function in Python.
     """
 
@@ -23,6 +23,14 @@ def Bloch(lambd=0.01, delta=math.pi/12, N=100000, v0=[1, 0, 0], theta=math.pi/2,
             v[k, i] - np.dot(u, v[:, i]) * u[k]) + np.sin(delta) * np.cross(v[:, i], u)[k]) for k in range(3)]
 
         v[:, i + 1] = w
+
+    return v
+
+
+def Plot(v, N=100000):
+    """
+    This function 3D-plots the Bloch sphere.
+    """
 
     a = np.linspace(0, 2 * np.pi, 100)
     b = np.linspace(0, np.pi, 100)
@@ -46,7 +54,38 @@ def Bloch(lambd=0.01, delta=math.pi/12, N=100000, v0=[1, 0, 0], theta=math.pi/2,
 
 
 def main():
-    Bloch()
+    """
+    Ask user for input and plot the Bloch sphere.
+    """
+
+    try:
+        lambd = float(input("Lambda (press enter for default value): "))
+
+        delta = float(input("Delta (press enter for default value): "))
+
+        N = int(input("Number of steps (press enter for default value): "))
+
+        v0 = [float(input("Initial x-component (press enter for default value): ")),
+              float(input("Initial y-component (press enter for default value): ")),
+              float(input("Initial z-component (press enter for default value): "))]
+
+        theta = float(input("Theta (press enter for default value): "))
+
+        omega = float(input("Omega (press enter for default value): "))
+
+        phi = float(input("Phi (press enter for default value): "))
+
+    except:
+        lambd = 0.01
+        delta = math.pi/12
+        N = 100000
+        v0 = [1, 0, 0]
+        theta = math.pi/2
+        omega = 1.1
+        phi = 0
+
+    v = Bloch(lambd, delta, N, v0, theta, omega, phi)
+    Plot(v, N)
 
 
 if __name__ == "__main__":
