@@ -22,7 +22,7 @@ ___
 
 In 2012, The Department of Mathematics at Michigan State University initiated the Mathematics Exchange Program, a one-semester program for talented students from Jilin University, Nankai University and Xi’an Jiaotong University to conduct undergraduate research alongside MSU professors and students.
 
-As part of Michigan State University's Mathematics Exchange Program, I am conducting research alongside Dr. Schenker and his work on Quantum Ergodic Processes leading the coding portion of project translating MATLAB scripts that visualize the probability density function of random quantum channel tunneling to Python. 
+This is the repository for Michigan State University Mathematics Professor Schenker and his work on Quantum Ergodic Processes. 
 &nbsp;
 
 **Technologies:**
