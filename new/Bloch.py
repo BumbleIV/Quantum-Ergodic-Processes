@@ -1,3 +1,6 @@
+# Next Goal: make the Bloch sphere a superclass. Make it possible to create a Bloch sphere with different parameters.
+
+
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -57,32 +60,6 @@ def main():
     """
     Ask user for input and plot the Bloch sphere.
     """
-
-    try:
-        lambd = float(input("Lambda (press enter for default value): "))
-
-        delta = float(input("Delta (press enter for default value): "))
-
-        N = int(input("Number of steps (press enter for default value): "))
-
-        v0 = [float(input("Initial x-component (press enter for default value): ")),
-              float(input("Initial y-component (press enter for default value): ")),
-              float(input("Initial z-component (press enter for default value): "))]
-
-        theta = float(input("Theta (press enter for default value): "))
-
-        omega = float(input("Omega (press enter for default value): "))
-
-        phi = float(input("Phi (press enter for default value): "))
-
-    except:
-        lambd = 0.01
-        delta = math.pi/12
-        N = 100000
-        v0 = [1, 0, 0]
-        theta = math.pi/2
-        omega = 1.1
-        phi = 0
 
     v = Bloch(lambd, delta, N, v0, theta, omega, phi)
     Plot(v, N)
