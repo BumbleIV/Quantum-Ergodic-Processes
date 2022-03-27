@@ -1,13 +1,15 @@
-# Next Goal: make the Bloch sphere a superclass. Make it possible to create a Bloch sphere with different parameters.
+# Next Goal: make the Bloch sphere a superclass.
+# Make it possible to create a Bloch sphere with different parameters.
 
 
 import math
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
 
 
-def Bloch(lambd=0.01, delta=math.pi/12, N=100000, v0=[1, 0, 0], theta=math.pi/2, omega=1.1, phi=0):
+def Bloch(lambd=0.01, delta=math.pi/12, N=10000, v0=[1, 0, 0], theta=math.pi/2, omega=1.1, phi=0):
     """ 
     This function creates the Bloch sphere based on user input. Default parameters are provided.
     Lambda is named "lambd" to avoid confusion with the lambda function in Python.
@@ -30,7 +32,7 @@ def Bloch(lambd=0.01, delta=math.pi/12, N=100000, v0=[1, 0, 0], theta=math.pi/2,
     return v
 
 
-def Plot(v, N=100000):
+def Plot(v, N=10000):
     """
     This function 3D-plots the Bloch sphere.
     """
@@ -58,8 +60,23 @@ def Plot(v, N=100000):
 
 def main():
     """
-    Ask user for input and plot the Bloch sphere.
+    Ask user for input and plot the Bloch sphere. 
+    If no input is given, default parameters are used.
     """
+
+    while True:
+        print("Press Enter button to use default parameters.")
+        print("Press 'P' or 'p' to plot the Bloch sphere.")
+
+        user_input = input("\n")
+
+        if user_input == "":
+            v = Bloch()
+            Plot(v)
+            break
+
+        elif user_input.upper() == "P":
+            pass
 
     v = Bloch(lambd, delta, N, v0, theta, omega, phi)
     Plot(v, N)
