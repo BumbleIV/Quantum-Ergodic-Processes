@@ -13,6 +13,7 @@ def Bloch(lambd=0.01, delta=math.pi/12, N=10000, v0=[1, 0, 0], theta=math.pi/2, 
     """ 
     This function creates the Bloch sphere based on user input. Default parameters are provided.
     Lambda is named "lambd" to avoid confusion with the lambda function in Python.
+    COMPLETE
     """
 
     v = np.zeros((3, N+1))
@@ -35,6 +36,7 @@ def Bloch(lambd=0.01, delta=math.pi/12, N=10000, v0=[1, 0, 0], theta=math.pi/2, 
 def Plot(v, N=10000):
     """
     This function 3D-plots the Bloch sphere.
+    COMPLETE
     """
 
     a = np.linspace(0, 2 * np.pi, 100)
@@ -61,7 +63,8 @@ def Plot(v, N=10000):
 def main():
     """
     Ask user for input and plot the Bloch sphere. 
-    If no input is given, default parameters are used.
+    If no input is given, default parameters are used
+    INCOMPLETE
     """
 
     while True:
@@ -84,3 +87,11 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# #############################################################################
+# take spherically symmetric function and vary gamma. "histogrammify" it.
+# find list of points.
+#
+# what happens with the density of points? what is the distribution of points?
+# also vary theta.
