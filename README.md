@@ -22,7 +22,7 @@ ___
 
 In 2012, The Department of Mathematics at Michigan State University initiated the Mathematics Exchange Program, a one-semester program for talented students from Jilin University, Nankai University and Xi’an Jiaotong University to conduct undergraduate research alongside MSU professors and students.
 
-This is the repository for Michigan State University Mathematics Professor Schenker and his work on Quantum Ergodic Processes. 
+This is the repository for our work on Quantum Ergodic Processes.
 &nbsp;
 
 **Technologies:**
@@ -42,6 +42,10 @@ This is the repository for Michigan State University Mathematics Professor Schen
 &nbsp;
 
 - [Professor Jeffrey Schenker](https://sites.google.com/a/msu.edu/jeffrey-schenker/home)
+&nbsp;
+
+
+- Professor Ilya Kachkovskiy 
 &nbsp;
 
 - Kong Xiangshuo
