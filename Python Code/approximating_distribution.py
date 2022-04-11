@@ -38,18 +38,17 @@ def n_times(sphere, ball, n, g):
     return v
 
 
-num = 100
-tries = 100000
-start = rand_ball_uniform
 def dist(): return rand_sphere_theta(np.pi/4)
 
 
-gamma = 0.6
+def main():
+    num = 100
+    tries = 100000
+    start = rand_ball_uniform()
+    gamma = 0.6
 
-norms = [np.linalg.norm(n_times(dist, start, num, gamma))
-         for i in range(tries)]
+    norms = [np.linalg.norm(n_times(dist, start, num, gamma))
+             for i in range(tries)]
 
-plt.hist(norms, 70, (0, 1))
-
-
-plt.show()
+    plt.hist(norms, 70, (0, 1))
+    plt.show()
