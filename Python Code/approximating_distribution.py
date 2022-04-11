@@ -52,3 +52,7 @@ def main():
 
     plt.hist(norms, 70, (0, 1))
     plt.show()
+
+
+if __name__ == "__main__":
+    main()
